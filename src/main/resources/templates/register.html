@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入笑而不语的数码小店 - 注册</title>
+    <!-- 引入 Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .register-card { max-width: 450px; margin-top: 80px; border: none; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card register-card mx-auto shadow-sm">
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-primary">🚀 加入笑而不语的数码小店</h2>
+                <p class="text-muted">创建一个新账户以开启您的探索之旅</p>
+            </div>
+
+            <!-- 注册表单 -->
+            <form th:action="@{/register}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">用户名</label>
+                    <input type="text" name="username" class="form-control" placeholder="设置您的登录名" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">电子邮箱</label>
+                    <input type="email" name="email" class="form-control" placeholder="用于接收发货通知邮件" required>
+                    <div class="form-text">我们绝不会泄露您的个人隐私。</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">设置密码</label>
+                    <input type="password" name="password" class="form-control" placeholder="请输入密码" required>
+                </div>
+
+                <div th:if="${error}" class="alert alert-danger p-2 small mb-3" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${error}">错误消息内容</span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold mt-3">立即注册</button>
+            </form>
+
+            <div class="mt-4 text-center">
+                <span class="text-muted">已有账号？</span>
+                <a href="/login" class="text-decoration-none fw-bold">直接登录</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/" class="text-muted text-decoration-none small">← 返回首页</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>笑而不语的数码小店 - 首页</title>
+    <!-- 引入现代化的 Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .navbar-brand { font-weight: bold; letter-spacing: 1px; }
+        .product-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 15px;
+            overflow: hidden; /* 确保图片圆角生效 */
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+        /* 图片高度固定，防止页面错乱 */
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 1. 顶部导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/">🚀 xeby MALL</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">首页</a>
+                </li>
+                <!-- 如果用户未登录 -->
+                <li class="nav-item" th:if="${session.user == null}">
+                    <a class="btn btn-outline-light btn-sm ms-2" href="/login">登录</a>
+                </li>
+                <li class="nav-item" th:if="${session.user == null}">
+                    <a class="btn btn-primary btn-sm ms-2" href="/register">注册</a>
+                </li>
+
+                <!-- 如果用户已登录 -->
+                <li class="nav-item d-flex align-items-center" th:if="${session.user != null}">
+                    <span class="text-light me-3">欢迎您，<strong th:text="${session.user.username}">用户</strong></span>
+                    <!-- 管理后台入口 -->
+                    <a class="btn btn-sm btn-warning me-2" href="/admin/products" th:if="${session.user.role == 'ADMIN'}">管理后台</a>
+                    <a class="btn btn-sm btn-outline-info" href="/orders">我的订单</a>
+                    <a class="btn btn-sm btn-danger ms-2" href="/logout">注销</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">笑而不语的数码小店</h1>
+        <p class="lead text-muted">探索前沿科技，享受极客生活</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- 循环显示商品卡片 -->
+        <div class="col" th:each="p : ${productList}">
+            <div class="card h-100 shadow-sm border-0 product-card">
+
+                <!-- 【第一步修改点】：添加动态生成的占位图片 -->
+                <img th:src="'https://placehold.jp/24/0d6efd/ffffff/300x200.png?text=' + ${p.name}"
+                     class="card-img-top" th:alt="${p.name}">
+
+                <div class="card-body">
+                    <h5 class="card-title fw-bold" th:text="${p.name}">商品名称</h5>
+                    <p class="card-text text-muted small" style="height: 3rem; overflow: hidden;" th:text="${p.description}">描述</p>
+                    <hr class="my-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-primary fw-bold h4 mb-0">￥<span th:text="${p.price}"></span></span>
+
+                        <form th:action="@{/buy}" method="post">
+                            <input type="hidden" name="productId" th:value="${p.id}">
+                            <button type="submit" class="btn btn-primary btn-sm px-3 shadow-sm">立即购买</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 text-muted small">
+                    当前库存: <span th:text="${p.stock}" th:classappend="${p.stock < 5} ? 'text-danger fw-bold' : ''">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
