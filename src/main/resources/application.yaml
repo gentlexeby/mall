@@ -1,26 +1,30 @@
 spring:
   # 1. 数据库配置
   datasource:
-    # 确保库名是 my_mall
     url: jdbc:mysql://localhost:3306/my_mall?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
     username: root
-    password: 314500
+    password: '314500'
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  # 2. 邮件配置（实验核心：发货通知邮件）
+  # 2. 邮件配置 (注意：mail 必须和 datasource 对齐)
   mail:
-    host: smtp.qq.com          # 如果用的是QQ邮箱就保持不变
-    username: 3497136392@qq.com   # 填入你的发件人QQ邮箱
-    password: irovuhweodjmcjbj        # 注意！这里填16位的“授权码”，不能填QQ登录密码！
+    host: smtp.qq.com
+    port: 465
+    username: 3497136392@qq.com
+    password: irovuhweodjmcjbj
+    default-encoding: UTF-8
     properties:
       mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.socketFactory.port: 465
+      mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
 
-# 3. 网站端口配置
+# 3. 其他配置
 server:
   port: 8080
 
-# 4. MyBatis-Plus 配置（可选，但强烈建议加上，可以在控制台看SQL执行过程）
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
